@@ -11,6 +11,7 @@ namespace coding_events_practice.Controllers
     public class EventsController : Controller
     {
         // GET: /<controller>/
+        private static Dictionary<string, string> Events = new Dictionary<string, string>();
         public IActionResult Index()
         {
             List<string> Events = new List<string>();
@@ -22,5 +23,7 @@ namespace coding_events_practice.Controllers
 
             return View();
         }
+
+
     }
 }
