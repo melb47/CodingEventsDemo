@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CodingEventsDemo.Data;
+using CodingEventsDemo.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,14 +12,10 @@ namespace coding_events_practice.Controllers
 {
     public class EventsController : Controller
     {
-
-        static private Dictionary<string, string> Events = new Dictionary<string, string>();
-
         // GET: /<controller>/
         public IActionResult Index()
         {
-            ViewBag.events = Events;
-
+            ViewBag.events = EventData.GetAll();
             return View();
         }
 
@@ -28,11 +26,41 @@ namespace coding_events_practice.Controllers
 
         [HttpPost]
         [Route("Events/Add")]
-        public IActionResult NewEvent(string name, string desc = "")
+        public IActionResult NewEvent(Event newEvent)
         {
-            Events.Add(name, desc);
-            
+            EventData.Add(newEvent);
+            return Redirect("/Events");
+        }
 
+        public IActionResult Delete()
+        {
+            ViewBag.events = EventData.GetAll();
+            return View();
+        }
+        [HttpPost]
+        [Route("Events/Delete")]
+        public IActionResult Delete(int[] eventIds)
+        {
+            foreach (int eventId in eventIds)
+            {
+                EventData.Remove(eventId);
+            }
+            return Redirect("/Events");
+        }
+
+        [Route("Events/Edit/{id?}")]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.editEvent = EventData.GetById(id);
+            return View();
+        }
+        [HttpPost]
+        [Route("Events/Edit")]
+        public IActionResult SubmitEditEventForm(int eventId, string name, string description)
+        {
+            ViewBag.editEvent = EventData.GetById(eventId);
+            ViewBag.editEvent.Name = name;
+            ViewBag.editEvent.Description = description;
             return Redirect("/Events");
         }
     }
