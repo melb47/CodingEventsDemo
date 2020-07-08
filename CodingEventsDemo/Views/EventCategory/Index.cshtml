@@ -2,12 +2,12 @@
 <h1>Event Categories</h1>
 <table class="table">
     <tr>
-        <th>Category Names</th>
+        <th>Category Name</th>
     </tr>
-    @foreach (var cat in Model)
+    @foreach (EventCategory category in Model)
     {
         <tr>
-            <td>@cat.Name</td>
+            <td>@category.Name</td>
         </tr>
     }
 </table>
