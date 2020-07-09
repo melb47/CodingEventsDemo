@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodingEventsDemo.Migrations
 {
     [DbContext(typeof(EventDbContext))]
-    [Migration("20200708150421_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20200709202456_DatabaseResetInitialMigration")]
+    partial class DatabaseResetInitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,9 @@ namespace CodingEventsDemo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ContactEmail")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -33,12 +36,34 @@ namespace CodingEventsDemo.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("Type")
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("CodingEventsDemo.Models.EventCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events");
+                    b.ToTable("EventCategories");
+                });
+
+            modelBuilder.Entity("CodingEventsDemo.Models.Event", b =>
+                {
+                    b.HasOne("CodingEventsDemo.Models.EventCategory", "Category")
+                        .WithMany("Events")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

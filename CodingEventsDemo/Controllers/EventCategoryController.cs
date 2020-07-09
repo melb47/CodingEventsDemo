@@ -17,8 +17,8 @@ namespace CodingEventsDemo.Controllers
         }
         public IActionResult Index()
         {
-            List<EventCategory> eventCategories = context.EventCategories.ToList();
-            return View(eventCategories);
+            List<EventCategory> categories = context.EventCategories.ToList();
+            return View(categories);
         }
     }
 }
